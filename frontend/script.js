@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch('http://127.0.0.1:5000/api/auth/login', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json',"mode": 'no-cors' },
                     body: JSON.stringify({ username, password })
                 });
 
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchAdminUsers() {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://127.0.0.1:5000/api/admin/users', {
+            const response = await fetch('http://127.0.0.1:5000/api/users', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (!response.ok) {
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchAdminAppointments() {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://127.0.0.1:5000/api/admin/appointments', {
+            const response = await fetch('http://127.0.0.1:5000/api/appointments', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (!response.ok) {
@@ -493,3 +493,68 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchAdminOrders();
     }
 });
+
+// Delete Appointment
+async function deleteAppointment(appointmentId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://127.0.0.1:5000/api/appointments/${appointmentId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}`}
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        alert('Appointment deleted successfully');
+        fetchAdminAppointments(); // Refresh the appointment list
+    } catch (error) {
+        console.error('Error deleting appointment:', error);
+        alert('Failed to delete appointment');
+    }
+}
+
+async function deleteProduct(productId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://127.0.0.1:5000/api/products/${productId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            alert('Product deleted successfully');
+            fetchAdminProducts();
+        } else {
+            const errorText = await response.text();
+            console.log('Error response text:', errorText);
+            alert('Deleting product failed: ' + response.statusText);
+        }
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        alert('Deleting product failed');
+    }
+}
+
+async function deleteUser(userId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://127.0.0.1:5000/api/users/${userId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            alert('User deleted successfully');
+            fetchAdminUsers();
+        } else {
+            const errorText = await response.text();
+            console.log('Error response text:', errorText);
+            alert('Deleting user failed: ' + response.statusText);
+        }
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('Deleting user failed');
+    }
+}
