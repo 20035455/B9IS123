@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from flask_jwt_extended import jwt_required
 from app.models import Product
 from app import db
@@ -7,8 +8,9 @@ product_bp = Blueprint('products', __name__)
 
 @product_bp.route('/products', methods=['POST'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def add_product():
-    data = request.get_json()
+    data = request.form
     name = data.get('name')
     description = data.get('description')
     price = data.get('price')
@@ -33,17 +35,21 @@ def add_product():
     return jsonify({'message': 'Product added successfully'}), 201
 
 @product_bp.route('/products', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_products():
     products = Product.query.all()
     return jsonify([product.to_dict() for product in products]), 200
 
 @product_bp.route('/products/<int:product_id>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_product(product_id):
     product = Product.query.get_or_404(product_id)
     return jsonify(product.to_dict()), 200
 
 @product_bp.route('/products/<int:product_id>', methods=['PUT'])
+
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def update_product(product_id):
     product = Product.query.get_or_404(product_id)
     data = request.get_json()
@@ -60,8 +66,10 @@ def update_product(product_id):
 
 @product_bp.route('/products/<int:product_id>', methods=['DELETE'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def delete_product(product_id):
     product = Product.query.get_or_404(product_id)
     db.session.delete(product)
     db.session.commit()
     return jsonify({'message': 'Product deleted successfully'}), 200
+

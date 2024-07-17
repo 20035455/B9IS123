@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
+
 from app.models import Product, Appointment, Order, User, Cart
 from app import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -7,6 +9,7 @@ import json
 customer_bp = Blueprint('customer', __name__)
 
 @customer_bp.route('/products', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_products():
     products = Product.query.all()
     return jsonify([product.to_dict() for product in products])
@@ -20,6 +23,7 @@ def get_product(product_id):
 
 @customer_bp.route('/appointments', methods=['POST'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def book_appointment():
     user_id = get_jwt_identity()['id']
     data = request.get_json()
@@ -34,6 +38,7 @@ def book_appointment():
 
 @customer_bp.route('/appointments', methods=['GET'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def get_appointments():
     user_id = get_jwt_identity()['id']
     appointments = Appointment.query.filter_by(user_id=user_id).all()
@@ -41,6 +46,7 @@ def get_appointments():
 
 @customer_bp.route('/cart', methods=['POST'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def add_to_cart():
     user_id = get_jwt_identity()['id']
     data = request.get_json()
@@ -59,6 +65,7 @@ def add_to_cart():
 
 @customer_bp.route('/cart', methods=['GET'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def get_cart():
     user_id = get_jwt_identity()['id']
     cart = Cart.query.filter_by(user_id=user_id).first()
@@ -68,6 +75,7 @@ def get_cart():
 
 @customer_bp.route('/orders', methods=['POST'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def place_order():
     user_id = get_jwt_identity()['id']
     cart = Cart.query.filter_by(user_id=user_id).first()
@@ -91,6 +99,7 @@ def place_order():
 
 @customer_bp.route('/orders', methods=['GET'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def get_orders():
     user_id = get_jwt_identity()['id']
     orders = Order.query.filter_by(user_id=user_id).all()

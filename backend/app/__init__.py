@@ -22,11 +22,13 @@ def create_app(config_class=Config):
     from app.controllers.appointment_controller import appointment_bp
     from app.controllers.product_controller import product_bp
     from app.controllers.order_controller import order_bp
+    from app.controllers.admin_controller import admin_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(appointment_bp, url_prefix='/api')
     app.register_blueprint(product_bp, url_prefix='/api')
     app.register_blueprint(order_bp, url_prefix='/api')
+    app.register_blueprint(admin_bp,url_prefix='/api')
 
     return app
 

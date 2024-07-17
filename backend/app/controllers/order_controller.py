@@ -2,6 +2,7 @@ import logging
 import traceback
 from datetime import datetime
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from app.models import Order, Product
 from app import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 @order_bp.route('/orders', methods=['POST'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def create_order():
     data = request.get_json()
     user_id = get_jwt_identity()['id']
@@ -37,6 +39,7 @@ def create_order():
 
 @order_bp.route('/orders', methods=['GET'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def get_orders():
     try:
         user_id = get_jwt_identity()['id']
@@ -49,6 +52,7 @@ def get_orders():
 
 @order_bp.route('/admin/orders', methods=['GET'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def get_all_orders():
     try:
         orders = Order.query.all()

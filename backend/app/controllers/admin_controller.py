@@ -9,13 +9,14 @@ admin_bp = Blueprint('admin', __name__)
 
 @admin_bp.route('/users', methods=['GET'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def get_users():
     users = User.query.all()
     return jsonify([user.to_dict() for user in users])
 
 @admin_bp.route('/users/<int:user_id>', methods=['DELETE'])
-@cross_origin(supports_credentials=True)
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def delete_user(user_id):
     user = User.query.get(user_id)
     if user:
@@ -26,6 +27,7 @@ def delete_user(user_id):
 
 @admin_bp.route('/products', methods=['POST'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def add_product():
     data = request.form
     file = request.files.get('image')
@@ -48,6 +50,7 @@ def add_product():
 
 @admin_bp.route('/products/<int:product_id>', methods=['PUT'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def update_product(product_id):
     product = Product.query.get(product_id)
     if product:
@@ -69,6 +72,7 @@ def update_product(product_id):
 
 @admin_bp.route('/products/<int:product_id>', methods=['DELETE'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def delete_product(product_id):
     product = Product.query.get(product_id)
     if product:
@@ -79,12 +83,14 @@ def delete_product(product_id):
 
 @admin_bp.route('/appointments', methods=['GET'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def get_appointments():
     appointments = Appointment.query.all()
     return jsonify([appointment.to_dict() for appointment in appointments])
 
 @admin_bp.route('/appointments/<int:appointment_id>', methods=['PUT'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def update_appointment(appointment_id):
     appointment = Appointment.query.get(appointment_id)
     if appointment:
@@ -98,6 +104,7 @@ def update_appointment(appointment_id):
 
 @admin_bp.route('/appointments/<int:appointment_id>', methods=['DELETE'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def delete_appointment(appointment_id):
     appointment = Appointment.query.get(appointment_id)
     if appointment:
@@ -108,12 +115,14 @@ def delete_appointment(appointment_id):
 
 @admin_bp.route('/orders', methods=['GET'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def get_orders():
     orders = Order.query.all()
     return jsonify([order.to_dict() for order in orders])
 
 @admin_bp.route('/orders/<int:order_id>', methods=['PUT'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def update_order(order_id):
     order = Order.query.get(order_id)
     if order:
@@ -125,6 +134,7 @@ def update_order(order_id):
 
 @admin_bp.route('/orders/<int:order_id>', methods=['DELETE'])
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def delete_order(order_id):
     order = Order.query.get(order_id)
     if order:
